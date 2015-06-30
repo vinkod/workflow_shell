@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+
+#Exit the script if any individual command fails
+set -o errexit
+
+#Exit the script if it tries to use any undeclared variables
+set -o nounset
+
+#Un-comment this next line if you want to see exactly what this script is doing
+#set -o xtrace
+
+#Find where this script exists
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  [[ ${SOURCE} != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIRECTORY="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+
+#Imports
+source "${SCRIPT_DIRECTORY}/git/gad.sh"
+source "${SCRIPT_DIRECTORY}/git/gcam.sh"
+source "${SCRIPT_DIRECTORY}/git/gitamend.sh"
+source "${SCRIPT_DIRECTORY}/git/gitgo.sh"
+source "${SCRIPT_DIRECTORY}/git/gitlive.sh"
+source "${SCRIPT_DIRECTORY}/git/gitlog.sh"
+source "${SCRIPT_DIRECTORY}/git/gitpretty.sh"
+source "${SCRIPT_DIRECTORY}/git/gpfo.sh"
+source "${SCRIPT_DIRECTORY}/git/grb.sh"
+source "${SCRIPT_DIRECTORY}/git/gs.sh"
+source "${SCRIPT_DIRECTORY}/git/mvncompile.sh"
+source "${SCRIPT_DIRECTORY}/git/mvngo.sh"
+source "${SCRIPT_DIRECTORY}/git/mvngolive.sh"
+source "${SCRIPT_DIRECTORY}/git/mvngonotest.sh"
+source "${SCRIPT_DIRECTORY}/git/mvnpomchange.sh"
+source "${SCRIPT_DIRECTORY}/git/mvnsite.sh"
+source "${SCRIPT_DIRECTORY}/git/mvntest.sh"
+source "${SCRIPT_DIRECTORY}/git/uploadjars.sh"
+
+
+function printHelp {
+    echo "usage: wsh <command> [<args>]
+
+The full list of commands is as follows:
+   gad            Stages all files and folders in the current directory.
+   gcam           Takes one argument, the message.
+                  Commits all staged changes with the given message.
+   gitamend       Amends the most recent commit to ensure that it has the correct author and an updated timestamp.
+   gitgo          Takes one arguemnt, the number of commits to rebase.
+                  Commits all staged changes, rebases interactively, amends the most recent commit, then force pushes.
+   gitlive        Commits all staged changes, force pushes.
+   gitlog         Displays the git log with nice colors and stuff
+   gitpretty      Displays the git log with each commit taking only one line
+   gpfo           Force pushes
+   grb            Takes one arguemnt, the number of commits to rebase.
+                  Rebases interactively with the given number.
+   gs             Displays the current status of the git repository
+   mvncompile     Updates, cleans, compiles, and compiles tests
+   mvngo          Updates, cleans, and installs
+   mvngolive      Updates, cleans, installs (skipping all tests) and uploads console JARs to pophdevutil30
+                  (must be run in the project's root or in one of the console modules' folders)
+   mvngonotest    Updates, cleans, installs (skipping all tests)
+   mvnpomchange   Takes one argument, the new POM version.
+                  Changes the version of the module in the current directory and all submodules to the new verison
+   mvnsite        Updates, cleans, and installs, generates site
+   mvntest        Takes one argument, the name of a class which contains tests.
+                  Updates, then attempts to run all specified tests
+   uploadjars     Uploads console JARs to pophdevutil30
+                  (must be run in the project's root or in one of the console modules' folders)
+   "
+}
+
+#Check the number of arguments and confirm with user if they are correct
+if [[ $# -lt 1 ]]
+	then printHelp
+		exit 1
+	else
+        workFlowCommand=$1
+        shift #eats the first argument, which should be a commmand
+    	case ${workFlowCommand} in
+    	    "-h" )
+    	        printHelp;;
+            "gad" )
+        	    gad "$@"; 
+                exit 0;; #calls a function with the remaining arguments after the shift done above
+        	"gcam" )
+        	    gcam "$@"; 
+                exit 0;;
+            "gitamend" )
+        	    gitamend "$@"; 
+                exit 0;;
+            "gitgo" )
+        	    gitgo "$@"; 
+                exit 0;;
+            "gitlive" )
+        	    gitlive "$@"; 
+                exit 0;;
+            "gitlog" )
+        	    gitlog "$@"; 
+                exit 0;;
+            "gitpretty" )
+        	    gitpretty "$@"; 
+                exit 0;;
+            "gpfo" )
+        	    gpfo "$@"; 
+                exit 0;;
+            "grb" )
+        	    grb "$@"; 
+                exit 0;;
+            "gs" )
+        	    gs "$@"; 
+                exit 0;;
+            "mvncompile" )
+        	    mvncompile "$@"; 
+                exit 0;;
+            "mvngo" )
+        	    mvngo "$@"; 
+                exit 0;;
+            "mvngolive" )
+        	    mvngolive "$@"; 
+                exit 0;;
+            "mvngonotest" )
+        	    mvngonotest "$@"; 
+                exit 0;;
+            "mvnpomchange" )
+        	    mvnpomchange "$@"; 
+                exit 0;;
+            "mvnsite" )
+        	    mvnsite "$@"; 
+                exit 0;;
+            "mvntest" )
+        	    mvntest "$@"; 
+                exit 0;;
+            "uploadjars" )
+        	    uploadjars "$@";
+                exit 0;;
+
+    	    #The default case
+    	    * ) printHelp; exit 1;;
+    	esac
+fi
+
+

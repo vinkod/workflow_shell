@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-function printGCAMhelp {
-    echo "usage: wsh gcam <message>"
+function printMVNTESThelp {
+    echo "usage: wsh mvntest <class name of test>"
 }
 
-function gcam {
+function mvntest {
     if [[ $# != 1 ]]
-    	then printGCAMHelp
+    	then printMVNTESThelp
     		exit 1
     	else
             option=$1
@@ -15,5 +15,5 @@ function gcam {
         	esac
     fi
 
-    git commit --all --message "$1"
+    mvn -U -Dtest=$1 test
 }

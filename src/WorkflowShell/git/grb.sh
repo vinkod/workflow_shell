@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-function printGCAMhelp {
-    echo "usage: wsh gcam <message>"
+function printGRBhelp {
+    echo "usage: wsh grb <number of commits to rebase>"
 }
 
-function gcam {
+function grb {
     if [[ $# != 1 ]]
-    	then printGCAMHelp
+    	then printGRBhelp
     		exit 1
     	else
             option=$1
@@ -15,5 +15,5 @@ function gcam {
         	esac
     fi
 
-    git commit --all --message "$1"
+    git rebase -i HEAD~"$1"
 }
