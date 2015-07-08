@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-function printMVNGOhelp {
+function printMVNGONOTESThelp {
     echo "usage: wsh mvngonotest"
 }
 
-function mvngo {
+function mvngonotest {
     if [[ $# != 0 ]]
     	then printMVNGOhelp
     		exit 1
     fi
 
-    mvn -U clean compile test-compile install
+    mvn -U clean install -Dmaven.test.skip=true -DskipITs
 }

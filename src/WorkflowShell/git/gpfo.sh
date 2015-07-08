@@ -12,5 +12,4 @@ function gpfo {
 
     branch_name=$(git rev-parse --abbrev-ref HEAD)
     git push -f origin ${branch_name}
-    #git branch --set-upstream-to ${branch_name} origin/${branch_name}
 }
