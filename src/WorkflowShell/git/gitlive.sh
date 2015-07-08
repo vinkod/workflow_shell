@@ -10,6 +10,6 @@ function gitlive {
     		exit 1
     fi
 
-    gcam "test commit, please squash"
+    gcam "test commit, please squash" || true
     gpfo
 }
