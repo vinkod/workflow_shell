@@ -10,5 +10,5 @@ function mvnsite {
     		exit 1
     fi
 
-    mvn -U clean install site
+    mvn -U -T 2C clean install site
 }

@@ -10,5 +10,5 @@ function mvncompile {
     		exit 1
     fi
 
-    mvn -U clean compile test-compile
+    mvn -U -T 2C clean compile test-compile
 }

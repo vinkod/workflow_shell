@@ -13,6 +13,6 @@ function uploadjars {
     #TODO: exclude those "original" jars
     scp *-console/target/*console*SNAPSHOT.jar "$USER@pophdevutil30:~/" || true
     scp target/*console*SNAPSHOT.jar "$USER@pophdevutil30:~/" || true
-    #scp *-console/target/*console*SNAPSHOT.jar "$USER@pophdevutil29:~/" || true
-    #scp target/*console*SNAPSHOT.jar "$USER@pophdevutil29:~/" || true
+    scp *-console/target/*console*SNAPSHOT.jar "$USER@pophdevutil29:~/" || true
+    scp target/*console*SNAPSHOT.jar "$USER@pophdevutil29:~/" || true
 }
