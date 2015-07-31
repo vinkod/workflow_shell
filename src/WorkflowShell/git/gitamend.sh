@@ -10,5 +10,5 @@ function gitamend {
     		exit 1
     fi
 
-    git commit --amend --reset-author --no-edit
+    git commit --amend --reset-author
 }

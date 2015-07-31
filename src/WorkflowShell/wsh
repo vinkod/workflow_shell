@@ -31,9 +31,12 @@ source "${SCRIPT_DIRECTORY}/git/gitpretty.sh"
 source "${SCRIPT_DIRECTORY}/git/gpfo.sh"
 source "${SCRIPT_DIRECTORY}/git/grb.sh"
 source "${SCRIPT_DIRECTORY}/git/gs.sh"
+source "${SCRIPT_DIRECTORY}/hadoop/hdl.sh"
+source "${SCRIPT_DIRECTORY}/hadoop/hgrep.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvncompile.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvngo.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvngolive.sh"
+source "${SCRIPT_DIRECTORY}/mvn/mvngolivequiet.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvngonotest.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvnpomchange.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvnsite.sh"
@@ -58,10 +61,13 @@ The full list of commands is as follows:
    grb            Takes one arguemnt, the number of commits to rebase.
                   Rebases interactively with the given number.
    gs             Displays the current status of the git repository
+   hdl            Downloads hadoop logs
+   hgrep          Greps through hadoop logs downloaded with hlogdl
    mvncompile     Updates, cleans, compiles, and compiles tests
    mvngo          Updates, cleans, and installs
    mvngolive      Updates, cleans, installs (skipping all tests) and uploads console JARs to pophdevutil30
                   (must be run in the project's root or in one of the console modules' folders)
+   mvngolivequiet Same as mvngolive, but supresses as much output as possible
    mvngonotest    Updates, cleans, installs (skipping all tests)
    mvnpomchange   Takes one argument, the new POM version.
                   Changes the version of the module in the current directory and all submodules to the new verison
@@ -113,6 +119,12 @@ if [[ $# -lt 1 ]]
             "gs" )
         	    gs "$@"; 
                 exit 0;;
+            "hdl" )
+        	    hdl "$@";
+                exit 0;;
+            "hgrep" )
+        	    hgrep "$@";
+                exit 0;;
             "mvncompile" )
         	    mvncompile "$@"; 
                 exit 0;;
@@ -121,6 +133,9 @@ if [[ $# -lt 1 ]]
                 exit 0;;
             "mvngolive" )
         	    mvngolive "$@"; 
+                exit 0;;
+            "mvngolivequiet" )
+        	    mvngolivequiet "$@";
                 exit 0;;
             "mvngonotest" )
         	    mvngonotest "$@"; 

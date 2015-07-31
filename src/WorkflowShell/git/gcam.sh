@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function printGCAMhelp {
+function printGCAMHelp {
     echo "usage: wsh gcam <message>"
 }
 
@@ -11,7 +11,7 @@ function gcam {
     	else
             option=$1
         	case ${option} in
-        	    "-h" ) printGCAMhelp; exit 1;;
+        	    "-h" ) printGCAMHelp; exit 1;;
         	esac
     fi
 
