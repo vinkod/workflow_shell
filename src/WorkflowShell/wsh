@@ -34,6 +34,7 @@ source "${SCRIPT_DIRECTORY}/git/gs.sh"
 source "${SCRIPT_DIRECTORY}/hadoop/hdl.sh"
 source "${SCRIPT_DIRECTORY}/hadoop/hgrep.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvncompile.sh"
+source "${SCRIPT_DIRECTORY}/mvn/mvndeps.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvngo.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvngolive.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvngolivequiet.sh"
@@ -64,6 +65,7 @@ The full list of commands is as follows:
    hdl            Downloads hadoop logs
    hgrep          Greps through hadoop logs downloaded with hlogdl
    mvncompile     Updates, cleans, compiles, and compiles tests
+   mvndeps        Prints a dependency report, showing used but undeclared dependencies and other useful stuff
    mvngo          Updates, cleans, and installs
    mvngolive      Updates, cleans, installs (skipping all tests) and uploads console JARs to pophdevutil30
                   (must be run in the project's root or in one of the console modules' folders)
@@ -127,6 +129,9 @@ if [[ $# -lt 1 ]]
                 exit 0;;
             "mvncompile" )
         	    mvncompile "$@"; 
+                exit 0;;
+            "mvndeps" )
+        	    mvndeps "$@";
                 exit 0;;
             "mvngo" )
         	    mvngo "$@"; 
