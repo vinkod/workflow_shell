@@ -11,5 +11,5 @@ function hgrep {
     		exit 2
     fi
 
-    grep -R --include="*all*" "$1" . > "$2"
+    grep  -A 5 -R --include="*all*" "$1" . > "$2"
 }

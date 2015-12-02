@@ -15,5 +15,5 @@ function mvnpomchange {
         	esac
     fi
 
-    mvn versions:set -DnewVersion=$1 -DgenerateBackupPoms=false;
+    mvn versions:set -DnewVersion=$1 -Djava.awt.headless=true -DgenerateBackupPoms=false;
 }

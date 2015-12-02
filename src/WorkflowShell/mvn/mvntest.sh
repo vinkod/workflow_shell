@@ -15,5 +15,5 @@ function mvntest {
         	esac
     fi
 
-    mvn -U -Dtest=$1 test
+    mvn -U -Dtest=$1 test -Djava.awt.headless=true
 }

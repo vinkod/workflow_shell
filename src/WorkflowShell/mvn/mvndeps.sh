@@ -10,5 +10,5 @@ function mvndeps {
     		exit 1
     fi
 
-    mvn -U -T 2C clean dependency:analyze
+    mvn -U -T 2C clean dependency:analyze -Djava.awt.headless=true
 }

@@ -10,5 +10,5 @@ function mvngoquiet {
     		exit 1
     fi
 
-    mvn -U --quiet clean compile test-compile install
+    mvn -U --quiet clean compile test-compile install -Djava.awt.headless=true
 }
