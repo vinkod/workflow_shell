@@ -44,6 +44,7 @@ source "${SCRIPT_DIRECTORY}/mvn/mvnpomchange.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvnsite.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvntest.sh"
 source "${SCRIPT_DIRECTORY}/misc/uploadjars.sh"
+source "${SCRIPT_DIRECTORY}/prod/prod.sh"
 
 
 function printHelp {
@@ -78,6 +79,7 @@ The full list of commands is as follows:
    mvnsite        Updates, cleans, and installs, generates site
    mvntest        Takes one argument, the name of a class which contains tests.
                   Updates, then attempts to run all specified tests
+   prod           logs onto prod sssh
    uploadjars     Uploads console JARs to pophdevutil30
                   (must be run in the project's root or in one of the console modules' folders)
    "
@@ -158,6 +160,9 @@ if [[ $# -lt 1 ]]
                 exit 0;;
             "mvntest" )
         	    mvntest "$@"; 
+                exit 0;;
+            "prod" )
+        	    prod "$@";
                 exit 0;;
             "uploadjars" )
         	    uploadjars "$@";
