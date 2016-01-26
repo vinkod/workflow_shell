@@ -43,6 +43,7 @@ source "${SCRIPT_DIRECTORY}/mvn/mvngonotest.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvnpomchange.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvnsite.sh"
 source "${SCRIPT_DIRECTORY}/mvn/mvntest.sh"
+source "${SCRIPT_DIRECTORY}/misc/sublcontentconfig.sh"
 source "${SCRIPT_DIRECTORY}/misc/uploadjars.sh"
 source "${SCRIPT_DIRECTORY}/prod/prod.sh"
 
@@ -51,37 +52,38 @@ function printHelp {
     echo "usage: wsh <command> [<args>]
 
 The full list of commands is as follows:
-   gad            Stages all files and folders in the current directory.
-   gcam           Takes one argument, the message.
-                  Commits all staged changes with the given message.
-   gitamend       Amends the most recent commit to ensure that it has the correct author and an updated timestamp.
-   gitgo          Takes one arguemnt, the number of commits to rebase.
-                  Commits all staged changes, rebases interactively, amends the most recent commit, then force pushes.
-   gitlive        Commits all staged changes, force pushes.
-   gitlog         Displays the git log with nice colors and stuff
-   gitpretty      Displays the git log with each commit taking only one line
-   gpfo           Force pushes
-   grb            Takes one arguemnt, the number of commits to rebase.
-                  Rebases interactively with the given number.
-   gs             Displays the current status of the git repository
-   hdl            Downloads hadoop logs
-   hgrep          Greps through hadoop logs downloaded with hlogdl
-   mvncompile     Updates, cleans, compiles, and compiles tests
-   mvndeps        Prints a dependency report, showing used but undeclared dependencies and other useful stuff
-   mvngo          Updates, cleans, and installs
-   mvngoquiet     Updates, cleans, and installs, supresses some output
-   mvngolive      Updates, cleans, installs (skipping all tests) and uploads console JARs to pophdevutil30
-                  (must be run in the project's root or in one of the console modules' folders)
-   mvngolivequiet Same as mvngolive, but supresses as much output as possible
-   mvngonotest    Updates, cleans, installs (skipping all tests)
-   mvnpomchange   Takes one argument, the new POM version.
-                  Changes the version of the module in the current directory and all submodules to the new verison
-   mvnsite        Updates, cleans, and installs, generates site
-   mvntest        Takes one argument, the name of a class which contains tests.
-                  Updates, then attempts to run all specified tests
-   prod           logs onto prod sssh
-   uploadjars     Uploads console JARs to pophdevutil30
-                  (must be run in the project's root or in one of the console modules' folders)
+   gad                   Stages all files and folders in the current directory.
+   gcam                  Takes one argument, the message.
+                         Commits all staged changes with the given message.
+   gitamend              Amends the most recent commit to ensure that it has the correct author and an updated timestamp.
+   gitgo                 Takes one arguemnt, the number of commits to rebase.
+                         Commits all staged changes, rebases interactively, amends the most recent commit, then force pushes.
+   gitlive               Commits all staged changes, force pushes.
+   gitlog                Displays the git log with nice colors and stuff
+   gitpretty             Displays the git log with each commit taking only one line
+   gpfo                  Force pushes
+   grb                   Takes one arguemnt, the number of commits to rebase.
+                         Rebases interactively with the given number.
+   gs                    Displays the current status of the git repository
+   hdl                   Downloads hadoop logs
+   hgrep                 Greps through hadoop logs downloaded with hlogdl
+   mvncompile            Updates, cleans, compiles, and compiles tests
+   mvndeps               Prints a dependency report, showing used but undeclared dependencies and other useful stuff
+   mvngo                 Updates, cleans, and installs
+   mvngoquiet            Updates, cleans, and installs, supresses some output
+   mvngolive             Updates, cleans, installs (skipping all tests) and uploads console JARs to pophdevutil30
+                         (must be run in the project's root or in one of the console modules' folders)
+   mvngolivequiet        Same as mvngolive, but supresses as much output as possible
+   mvngonotest           Updates, cleans, installs (skipping all tests)
+   mvnpomchange          Takes one argument, the new POM version.
+                         Changes the version of the module in the current directory and all submodules to the new verison
+   mvnsite               Updates, cleans, and installs, generates site
+   mvntest               Takes one argument, the name of a class which contains tests.
+                         Updates, then attempts to run all specified tests
+   prod                  logs onto prod ssh
+   sublcontentconfig     Opens all content record config files in deployment repo for content-processing
+   uploadjars            Uploads console JARs to pophdevutil30
+                         (must be run in the project's root or in one of the console modules' folders)
    "
 }
 
@@ -163,6 +165,9 @@ if [[ $# -lt 1 ]]
                 exit 0;;
             "prod" )
         	    prod "$@";
+                exit 0;;
+            "sublcontentconfig" )
+       	        sublcontentconfig "$@";
                 exit 0;;
             "uploadjars" )
         	    uploadjars "$@";
