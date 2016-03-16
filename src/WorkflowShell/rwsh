@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+@script_home = File.expand_path(File.dirname(__FILE__))
+Dir[@script_home+'/models/*.rb'].each {|file| require_relative file
+puts file
+}
+Dir[@script_home+'/git/*.rb'].each { |file|
+  require_relative file
+puts file
+}
+
+
+
+git_push_force_origin_initialze = GitPushForceOrigin.new
+
+git_push_force_origin_initialze.stuff
+
+command_new = Command.new('asdf')
+# git_push_force_origin = GitPushForceOrigin.new
+# git_push_force_origin.stuff
+
+command_new.subclasses.each { |thing| puts thing }
+
