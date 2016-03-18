@@ -1,3 +1,6 @@
+# These will allow us to parse options nicely
+require 'optparse'
+require 'ostruct'
 
 class Command
 
@@ -17,7 +20,7 @@ class Command
   def parse_options(arguments)
     options = OpenStruct.new
     options.verbose = false
-    options.help = true
+    options.help = false
 
     basic_options_parser = OptionParser.new do |opts|
       opts.banner = "Usage: " + @command_string
@@ -31,8 +34,8 @@ class Command
 
       opts.on_tail("-h", "--help", "Show this message") do
         options.help = true
-        puts opts
       end
+      @basic_options_printer = opts
     end
 
     # This will call the parser and make it put all basic options into basic_options
@@ -42,7 +45,7 @@ class Command
     # OpenStruct allows you to basically create a POJO-esque map-type object on the fly.
     parser_components = OpenStruct.new
     parser_components.basic_options = options
-    # parser_components.options_parser = basic_options_parser
+    parser_components.basic_options_printer = @basic_options_printer
     parser_components.leftover_arguments = arguments
     parser_components
   end

@@ -20,10 +20,11 @@ class GitPushForceOrigin < Command
     options.verbose = false
 
     specific_options_parser = OptionParser.new do |opts|
-      opts.separator ""
+      opts.banner = ""
       opts.separator "There are no specific options for this command."
 
       if parser_components.basic_options.help
+        puts parser_components.basic_options_printer
         puts opts
         exit
       end

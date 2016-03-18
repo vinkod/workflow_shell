@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# This will allow us to parse options nicely
-require 'optparse'
-
 # This line figures out where this script lives
 @script_home = File.expand_path(File.dirname(__FILE__))
 # This line will search all subdirectories for *.rb files and import them
@@ -22,22 +19,26 @@ Dir[@script_home + '/*/*.rb'].each {|file| require_relative file }
 @column_width = 22
 
 def run_command(command_string, arguments)
-  puts @command_map
   command_instance = @command_map[command_string]
   command_instance.run_command(arguments)
 end
 
 def print_help
+  puts "Need help? Here are the currently available commands:"
+
   @command_map.each do |command|
     # command will be of the format [command_string, command_instance]
     command_string = command.at(0)
     command_description = command.at(1).get_command_description
 
-    puts (padding(@column_width) +
+    puts (padding(@column_width/2) +
         command_string +
         padding(@column_width - command_string.length) +
         command_description)
   end
+
+  puts ""
+  puts "Run 'wsh <command> -h' for more information about a particular command"
 end
 
 # A util method for creating "x" amount of spaces
@@ -56,8 +57,6 @@ else
   # Separate the command string from the arguments.
   command_string = ARGV.at(0)
   rest_of_arguments = ARGV.drop(1)
-  puts command_string
-  puts rest_of_arguments
 
   # Run the command
   run_command(command_string, rest_of_arguments)
