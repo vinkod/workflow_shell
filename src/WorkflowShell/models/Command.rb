@@ -11,6 +11,9 @@ class Command
   def get_command_description
     @command_description
   end
+  def get_command_usage
+    @command_usage
+  end
 
   # Main body of commands. If this instance of this method is reached, something went wrong.
   def run_command(arguments)
@@ -23,7 +26,7 @@ class Command
     options.help = false
 
     basic_options_parser = OptionParser.new do |opts|
-      opts.banner = "Usage: " + @command_string
+      opts.banner = "Usage: " + get_command_usage
       opts.separator ""
       opts.separator "Basic options:"
 
