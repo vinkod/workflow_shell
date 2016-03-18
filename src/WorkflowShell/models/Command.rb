@@ -6,13 +6,13 @@ class Command
 
   # These are intended to be superclass methods. Hopefully each subclass will define these variables.
   def get_command_string
-    @command_string
+    return @command_string
   end
   def get_command_description
-    @command_description
+    return @command_description
   end
   def get_command_usage
-    @command_usage
+    return @command_usage
   end
 
   # Main body of commands. If this instance of this method is reached, something went wrong.
@@ -50,13 +50,13 @@ class Command
     parser_components.basic_options = options
     parser_components.basic_options_printer = @basic_options_printer
     parser_components.leftover_arguments = arguments
-    parser_components
+    return parser_components
   end
 
   # This method will return all subclasses of this class
   # https://stackoverflow.com/questions/3676274/how-to-get-all-class-names-in-a-namespace-in-ruby
   def self.descendants
-    ObjectSpace.each_object(Class).select { |klass| klass < self }
+    return ObjectSpace.each_object(Class).select { |klass| klass < self }
   end
 
   # When calling system commands, I get a warning that my path has a writable directory in it.
@@ -72,6 +72,24 @@ class Command
     return result
   end
 
+  def run_shell_command_with_output (command, verbose)
+    # Print the command, if desired
+    if verbose
+      puts "Running: " + command
+    end
+
+    # Run the command
+    # This line doesn't show color in the terminal, it just sort of does a "puts" of the output. But, at least we can know what that output was.
+    command_result = suppress_warnings { `#{command}` }
+
+    if verbose
+      puts "Result was: "+command_result
+    end
+    puts ""
+
+    return command_result
+  end
+
   def run_shell_command (command, verbose)
     # Print the command, if desired
     if verbose
@@ -79,15 +97,10 @@ class Command
     end
 
     # Run the command
-    command_result = suppress_warnings { `#{command}` }
+    # This line doesn't return the output, but at least we get terminal colors. The only result is pass/fail
+    command_result = suppress_warnings { system(command) }
+    puts ""
 
-    # Print the result
-    if verbose && !command_result.nil? && !command_result.empty?
-      puts command_result
-      puts ""
-    end
-
-    # return
-    command_result
+    return command_result
   end
 end

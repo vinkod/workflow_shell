@@ -3,10 +3,12 @@ require_relative '../models/Command'
 class GitPushForceOrigin < Command
   @command_string
   @command_description
+  @command_usage
 
   def initialize
     @command_string = 'gpfo'
     @command_description = 'Force pushes the current branch into a remote branch of the same name.'
+    @command_usage = @command_string
   end
 
   def run_command(arguments)
@@ -18,7 +20,7 @@ class GitPushForceOrigin < Command
     end
 
     get_branch_command = "git rev-parse --abbrev-ref HEAD"
-    branch_name = run_shell_command(get_branch_command, parser_components.basic_options.verbose)
+    branch_name = run_shell_command_with_output(get_branch_command, parser_components.basic_options.verbose)
 
     command = "git push -f origin #{branch_name}"
     run_shell_command(command, parser_components.basic_options.verbose)

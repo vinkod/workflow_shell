@@ -20,6 +20,7 @@ Dir[@script_home + '/*/*.rb'].each {|file| require_relative file }
 
 def run_command(command_string, arguments)
   command_instance = @command_map[command_string]
+  print_help unless !command_instance.nil?
   command_instance.run_command(arguments)
 end
 
@@ -39,6 +40,7 @@ def print_help
 
   puts ""
   puts "Run 'wsh <command> -h' for more information about a particular command"
+  exit(-1)
 end
 
 # A util method for creating "x" amount of spaces

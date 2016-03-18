@@ -1,13 +1,13 @@
 require_relative '../models/Command'
 
-class GitAddDot < Command
+class GitAmend < Command
   @command_string
   @command_description
   @command_usage
 
   def initialize
-    @command_string = 'gad'
-    @command_description = 'Stages all files and folders in the current directory.'
+    @command_string = 'gitamend'
+    @command_description = 'Amends the most recent commit to ensure that it has the correct author and an updated timestamp.'
     @command_usage = @command_string
   end
 
@@ -19,7 +19,7 @@ class GitAddDot < Command
       exit
     end
 
-    command = "git add ."
+    command = "git commit --amend --reset-author --no-edit"
     run_shell_command(command, parser_components.basic_options.verbose)
   end
 end
