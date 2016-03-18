@@ -12,12 +12,7 @@ class GitPushForceOrigin < Command
   def run_command(arguments)
     parser_components = parse_options(arguments)
     parser_components.basic_options
-
-    # parser_components.options_parser
     parser_components.leftover_arguments
-
-    options = OpenStruct.new
-    options.verbose = false
 
     specific_options_parser = OptionParser.new do |opts|
       opts.banner = ""
@@ -30,6 +25,12 @@ class GitPushForceOrigin < Command
       end
     end
 
-    puts "DO STUFF"
+    specific_options_parser.parse!(arguments)
+
+    get_branch_command = "git rev-parse --abbrev-ref HEAD"
+    branch_name = run_shell_command(get_branch_command, parser_components.basic_options.verbose)
+
+    push_command = "git push -f origin #{branch_name}"
+    push_result = run_shell_command(push_command, parser_components.basic_options.verbose)
   end
 end
