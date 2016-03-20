@@ -20,7 +20,8 @@ class Command
     raise "Specified command did not implement 'run_command' method."
   end
 
-  def parse_options(arguments)
+  def parse_options(arguments, is_basic_command)
+    arguments_backup = arguments.dup
     options = OpenStruct.new
     options.verbose = true
     options.help = false
@@ -38,18 +39,44 @@ class Command
       opts.on_tail("-h", "--help", "Show this message") do
         options.help = true
       end
+
       @basic_options_printer = opts
     end
 
     # This will call the parser and make it put all basic options into basic_options
-    # It will remove all options that it interacts with.
-    basic_options_parser.parse!(arguments)
+    # It will remove all options that it interacts with. If it finds an option it
+    # doesn't understand, it will store it and those will be sent in the result.
+    leftover_collector = Array.new
+    begin
+      # Attempt to parse everything
+      basic_options_parser.parse!(arguments)
+    rescue OptionParser::InvalidOption => e
+      # Put the option contained in the error into the leftover collector
+      leftover_collector << e.args
+      # Check to see if the next thing is not an option, and put that in the collector too
+      unless arguments.first.start_with?('-')
+        leftover_collector << arguments.shift
+      end
+      retry
+    end
+    leftover_arguments  = arguments_backup & ( arguments | leftover_collector.flatten )
+
+    if is_basic_command && options.help
+      print_help(@basic_options_printer, nil)
+      exit (-1)
+    end
+    if is_basic_command && !leftover_arguments.empty?
+      puts "Unknown arguments left over: " + leftover_arguments.to_s
+      puts ""
+      print_help(@basic_options_printer, nil)
+    end
 
     # OpenStruct allows you to basically create a POJO-esque map-type object on the fly.
     parser_components = OpenStruct.new
     parser_components.basic_options = options
     parser_components.basic_options_printer = @basic_options_printer
-    parser_components.leftover_arguments = arguments
+    parser_components.leftover_arguments = leftover_arguments
+
     return parser_components
   end
 
@@ -83,7 +110,7 @@ class Command
     command_result = suppress_warnings { `#{command}` }
 
     if verbose
-      puts "Result was: "+command_result
+      puts "Result was: " + command_result
     end
     puts ""
 
@@ -102,5 +129,11 @@ class Command
     puts ""
 
     return command_result
+  end
+
+  def print_help (basic_options, specific_options)
+    puts basic_options
+    puts specific_options
+    exit(-1)
   end
 end

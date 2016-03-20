@@ -13,14 +13,13 @@ class GitCommitAllMessage < Command
 
   def run_command(arguments)
     # Ask the Command class to parse the basic options like help and verbosity
-    parser_components = parse_options(arguments)
+    parser_components = parse_options(arguments, false)
 
     commit_message = parser_components.leftover_arguments.pop
     if commit_message.nil?
       puts "You MUST specify the commit message!"
       puts ""
-      puts parser_components.basic_options_printer
-      exit(-1)
+      print_help(parser_components.basic_options_printer, nil)
     end
 
     command = "git commit --all --message \"#{commit_message}\""

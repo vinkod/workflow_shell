@@ -13,14 +13,13 @@ class GitRebase < Command
 
   def run_command(arguments)
     # Ask the Command class to parse the basic options like help and verbosity
-    parser_components = parse_options(arguments)
+    parser_components = parse_options(arguments, false)
 
     commits_to_rebase = parser_components.leftover_arguments.pop
     if commits_to_rebase.nil?
       puts "You MUST specify the number of commits to rebase!"
       puts ""
-      puts parser_components.basic_options_printer
-      exit(-1)
+      print_help(parser_components.basic_options_printer, nil)
     end
 
     command = "git rebase -i HEAD~#{commits_to_rebase}"

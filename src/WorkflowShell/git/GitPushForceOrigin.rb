@@ -13,11 +13,7 @@ class GitPushForceOrigin < Command
 
   def run_command(arguments)
     # Ask the Command class to parse the basic options like help and verbosity
-    parser_components = parse_options(arguments)
-    if parser_components.basic_options.help
-      puts parser_components.basic_options_printer
-      exit
-    end
+    parser_components = parse_options(arguments, true)
 
     get_branch_command = "git rev-parse --abbrev-ref HEAD"
     branch_name = run_shell_command_with_output(get_branch_command, parser_components.basic_options.verbose)
