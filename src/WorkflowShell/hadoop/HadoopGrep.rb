@@ -14,7 +14,7 @@ class HadoopGrep < Command
   def run_command(arguments)
     original_arguments = arguments.dup
     # Ask the Command class to parse the basic options like help and verbosity
-    parser_components = parse_options(arguments, true, false)
+    parser_components = parse_options(arguments, false)
 
     # Parse any specific options and print help if necessary.
     specific_options = OpenStruct.new
