@@ -12,7 +12,6 @@ class HadoopGrep < Command
   end
 
   def run_command(arguments)
-    original_arguments = arguments.dup
     # Ask the Command class to parse the basic options like help and verbosity
     parser_components = parse_options(arguments, false)
 

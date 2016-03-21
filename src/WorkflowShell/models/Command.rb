@@ -54,7 +54,7 @@ class Command
       # Put the option contained in the error into the leftover collector
       leftover_collector << e.args
       # Check to see if the next thing is not an option, and put that in the collector too
-      unless arguments.first.start_with?('-')
+      if !arguments.first.nil? && !arguments.first.start_with?('-')
         leftover_collector << arguments.shift
       end
       retry
