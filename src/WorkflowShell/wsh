@@ -1,181 +1,65 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-#Exit the script if any individual command fails
-set -o errexit
+# This line figures out where this script lives
+@script_home = File.expand_path(File.dirname(__FILE__))
+# This line will search all subdirectories for *.rb files and import them
+Dir[@script_home + '/*/*.rb'].each {|file| require_relative file }
 
-#Exit the script if it tries to use any undeclared variables
-set -o nounset
+# Retrieve all subclasses of Command
+@command_classes = Command.descendants.each { |command_class| command_class.new }
 
-#Un-comment this next line if you want to see exactly what this script is doing
-#set -o xtrace
+# Instantiate each command class and map each instance to its command string
+@command_map = Hash[@command_classes.map { |command_class|
+  instantiated_command = command_class.new
+  command_string       = instantiated_command.get_command_string
+  [command_string, instantiated_command]
+}]
 
-#Find where this script exists
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-  [[ ${SOURCE} != /* ]] && SOURCE="$DIR/$SOURCE"
-done
-SCRIPT_DIRECTORY="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+# This is a general spacing/width size. If things look too spread out or to close together, change it.
+@column_width = 22
 
+def run_command(command_string, arguments)
+  command_instance = @command_map[command_string]
+  print_help if command_instance.nil?
+  command_instance.run_command(arguments)
+end
 
-#Imports
-source "${SCRIPT_DIRECTORY}/git/gad.sh"
-source "${SCRIPT_DIRECTORY}/git/gcam.sh"
-source "${SCRIPT_DIRECTORY}/git/gitamend.sh"
-source "${SCRIPT_DIRECTORY}/git/gitgo.sh"
-source "${SCRIPT_DIRECTORY}/git/gitlive.sh"
-source "${SCRIPT_DIRECTORY}/git/gitlog.sh"
-source "${SCRIPT_DIRECTORY}/git/gitpretty.sh"
-source "${SCRIPT_DIRECTORY}/git/gpfo.sh"
-source "${SCRIPT_DIRECTORY}/git/grb.sh"
-source "${SCRIPT_DIRECTORY}/git/gs.sh"
-source "${SCRIPT_DIRECTORY}/hadoop/hdl.sh"
-source "${SCRIPT_DIRECTORY}/hadoop/hgrep.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvncompile.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvndeps.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvngo.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvngoquiet.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvngolive.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvngolivequiet.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvngonotest.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvnpomchange.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvnsite.sh"
-source "${SCRIPT_DIRECTORY}/mvn/mvntest.sh"
-source "${SCRIPT_DIRECTORY}/misc/sublcontentconfig.sh"
-source "${SCRIPT_DIRECTORY}/misc/uploadjars.sh"
-source "${SCRIPT_DIRECTORY}/prod/prod.sh"
+def print_help
+  puts "Need help? Here are the currently available commands:"
 
+  @command_map.each do |command|
+    # command will be of the format [command_string, command_instance]
+    command_string = command.at(0)
+    command_description = command.at(1).get_command_description
 
-function printHelp {
-    echo "usage: wsh <command> [<args>]
+    puts (padding(@column_width/2) +
+        command_string +
+        padding(@column_width - command_string.length) +
+        command_description)
+  end
 
-The full list of commands is as follows:
-   gad                   Stages all files and folders in the current directory.
-   gcam                  Takes one argument, the message.
-                         Commits all staged changes with the given message.
-   gitamend              Amends the most recent commit to ensure that it has the correct author and an updated timestamp.
-   gitgo                 Takes one arguemnt, the number of commits to rebase.
-                         Commits all staged changes, rebases interactively, amends the most recent commit, then force pushes.
-   gitlive               Commits all staged changes, force pushes.
-   gitlog                Displays the git log with nice colors and stuff
-   gitpretty             Displays the git log with each commit taking only one line
-   gpfo                  Force pushes
-   grb                   Takes one arguemnt, the number of commits to rebase.
-                         Rebases interactively with the given number.
-   gs                    Displays the current status of the git repository
-   hdl                   Downloads hadoop logs
-   hgrep                 Greps through hadoop logs downloaded with hlogdl
-   mvncompile            Updates, cleans, compiles, and compiles tests
-   mvndeps               Prints a dependency report, showing used but undeclared dependencies and other useful stuff
-   mvngo                 Updates, cleans, and installs
-   mvngoquiet            Updates, cleans, and installs, supresses some output
-   mvngolive             Updates, cleans, installs (skipping all tests) and uploads console JARs to pophdevutil30
-                         (must be run in the project's root or in one of the console modules' folders)
-   mvngolivequiet        Same as mvngolive, but supresses as much output as possible
-   mvngonotest           Updates, cleans, installs (skipping all tests)
-   mvnpomchange          Takes one argument, the new POM version.
-                         Changes the version of the module in the current directory and all submodules to the new verison
-   mvnsite               Updates, cleans, and installs, generates site
-   mvntest               Takes one argument, the name of a class which contains tests.
-                         Updates, then attempts to run all specified tests
-   prod                  logs onto prod ssh
-   sublcontentconfig     Opens all content record config files in deployment repo for content-processing
-   uploadjars            Uploads console JARs to pophdevutil30
-                         (must be run in the project's root or in one of the console modules' folders)
-   "
-}
+  puts ""
+  puts "Run 'wsh <command> -h' for more information about a particular command"
+  exit(-1)
+end
 
-#Check the number of arguments and confirm with user if they are correct
-if [[ $# -lt 1 ]]
-	then printHelp
-		exit 1
-	else
-        workFlowCommand=$1
-        shift #eats the first argument, which should be a commmand
-    	case ${workFlowCommand} in
-    	    "-h" )
-    	        printHelp;;
-            "gad" )
-        	    gad "$@"; 
-                exit 0;; #calls a function with the remaining arguments after the shift done above
-        	"gcam" )
-        	    gcam "$@"; 
-                exit 0;;
-            "gitamend" )
-        	    gitamend "$@"; 
-                exit 0;;
-            "gitgo" )
-        	    gitgo "$@"; 
-                exit 0;;
-            "gitlive" )
-        	    gitlive "$@"; 
-                exit 0;;
-            "gitlog" )
-        	    gitlog "$@"; 
-                exit 0;;
-            "gitpretty" )
-        	    gitpretty "$@"; 
-                exit 0;;
-            "gpfo" )
-        	    gpfo "$@"; 
-                exit 0;;
-            "grb" )
-        	    grb "$@"; 
-                exit 0;;
-            "gs" )
-        	    gs "$@"; 
-                exit 0;;
-            "hdl" )
-        	    hdl "$@";
-                exit 0;;
-            "hgrep" )
-        	    hgrep "$@";
-                exit 0;;
-            "mvncompile" )
-        	    mvncompile "$@"; 
-                exit 0;;
-            "mvndeps" )
-        	    mvndeps "$@";
-                exit 0;;
-            "mvngo" )
-        	    mvngo "$@"; 
-                exit 0;;
-            "mvngoquiet" )
-        	    mvngoquiet "$@";
-                exit 0;;
-            "mvngolive" )
-        	    mvngolive "$@"; 
-                exit 0;;
-            "mvngolivequiet" )
-        	    mvngolivequiet "$@";
-                exit 0;;
-            "mvngonotest" )
-        	    mvngonotest "$@"; 
-                exit 0;;
-            "mvnpomchange" )
-        	    mvnpomchange "$@"; 
-                exit 0;;
-            "mvnsite" )
-        	    mvnsite "$@"; 
-                exit 0;;
-            "mvntest" )
-        	    mvntest "$@"; 
-                exit 0;;
-            "prod" )
-        	    prod "$@";
-                exit 0;;
-            "sublcontentconfig" )
-       	        sublcontentconfig "$@";
-                exit 0;;
-            "uploadjars" )
-        	    uploadjars "$@";
-                exit 0;;
+# A util method for creating "x" amount of spaces
+def padding(x)
+  spaces = ''
+  (0...x).each { |i|
+    spaces += ' '
+  }
+  spaces
+end
 
-    	    #The default case
-    	    * ) printHelp; exit 1;;
-    	esac
-fi
+# This is the actual script that will run.
+if ARGV.length < 1 || (ARGV.length == 1 && (ARGV.at(0) == "-h" || ARGV.at(0) == "help"))
+  print_help
+else
+  # Separate the command string from the arguments.
+  command_string = ARGV.at(0)
+  rest_of_arguments = ARGV.drop(1)
 
-
+  # Run the command
+  run_command(command_string, rest_of_arguments)
+end
