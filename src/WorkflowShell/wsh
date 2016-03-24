@@ -27,7 +27,7 @@ end
 def print_help
   puts "Need help? Here are the currently available commands:"
 
-  @command_map.each do |command|
+  @command_map.sort.each do |command|
     # command will be of the format [command_string, command_instance]
     command_string = command.at(0)
     command_description = command.at(1).get_command_description

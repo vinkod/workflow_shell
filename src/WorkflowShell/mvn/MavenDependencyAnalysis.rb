@@ -1,6 +1,6 @@
 require_relative '../models/Command'
 
-class MavenCompile < Command
+class MavenDependencyAnalysis < Command
   @command_string
   @command_description
   @command_usage

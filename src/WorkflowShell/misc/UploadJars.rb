@@ -25,5 +25,7 @@ class UploadJars < Command
     run_shell_command("scp target/*console*SNAPSHOT.jar \"$USER@pophdevvm219:~/\"", parser_components.basic_options.verbose)
     run_shell_command("scp *-console/target/*console*SNAPSHOT.jar \"$USER@pophdevutil30:~/\"", parser_components.basic_options.verbose)
     run_shell_command("scp target/*console*SNAPSHOT.jar \"$USER@pophdevutil30:~/\"", parser_components.basic_options.verbose)
+    run_shell_command("scp *-console/target/*console*SNAPSHOT.jar \"$USER@metroid-util-refrecord.northamerica.cerner.net:~/\"", parser_components.basic_options.verbose)
+    run_shell_command("scp target/*console*SNAPSHOT.jar \"$USER@metroid-util-refrecord.northamerica.cerner.net:~/\"", parser_components.basic_options.verbose)
   end
 end

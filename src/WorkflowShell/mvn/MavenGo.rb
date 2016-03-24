@@ -56,11 +56,11 @@ class MavenGo < Command
 
     specific_options_parser.parse!(parser_components.leftover_arguments)
 
-    unless parser_components.leftover_arguments.empty?
-      puts "Unknown arguments left over: " + parser_components.leftover_arguments.to_s
-      puts ""
-      print_help(parser_components.basic_options_printer, specific_options_parser)
-    end
+    # unless parser_components.leftover_arguments.empty?
+    #   puts "Unknown arguments left over: " + parser_components.leftover_arguments.to_s
+    #   puts ""
+    #   print_help(parser_components.basic_options_printer, specific_options_parser)
+    # end
 
     # Base command
     command = "mvn -U clean install"
@@ -84,6 +84,8 @@ class MavenGo < Command
 
     # Make sure it doesn't pop up those irritating Java GUI processes that steal window focus
     command += " -Djava.awt.headless=true"
+
+    parser_components.leftover_arguments.each { |arg| command += " " + arg }
 
     # Run it
     run_shell_command(command, parser_components.basic_options.verbose)
