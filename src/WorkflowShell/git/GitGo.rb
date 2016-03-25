@@ -20,15 +20,11 @@ class GitGo < Command
     parser_components = parse_options(arguments, false)
 
     commits_to_rebase = parser_components.leftover_arguments.pop
-    if commits_to_rebase.nil?
-      puts "You MUST specify the number of commits to rebase!"
-      puts ""
-      print_help(parser_components.basic_options_printer, nil)
-    end
-
     GitCommitAllMessage.new.run_command(["test commit, please squash"])
-    GitRebase.new.run_command([commits_to_rebase])
-    GitAmend.new.run_command([])
+    unless commits_to_rebase.nil?
+      GitRebase.new.run_command([commits_to_rebase])
+      GitAmend.new.run_command([])
+    end
     GitPushForceOrigin.new.run_command([])
   end
 end
