@@ -15,7 +15,7 @@ class HadoopDownloadLog < Command
 
   def run_command(arguments)
     # Ask the Command class to parse the basic options like help and verbosity
-    parser_components = parse_options(arguments, false, true)
+    parser_components = parse_options(arguments, false)
 
     job_url = parser_components.leftover_arguments.pop
     if job_url.to_s == ""
