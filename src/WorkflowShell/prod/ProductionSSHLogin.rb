@@ -50,6 +50,7 @@ class ProductionSSHLogin < Command
 
     specific_options_parser.parse!(parser_components.leftover_arguments)
 
+    # Check required parameters.
     pin = nil
     if specific_options.pin != nil
       pin = specific_options.pin
@@ -66,14 +67,20 @@ class ProductionSSHLogin < Command
       print_help(parser_components.basic_options_printer, specific_options_parser)
     end
 
+    # Print a warning telling people not to press buttons while this is running.
+    print_interactivity_warning
     @script_home = File.expand_path(File.dirname(__FILE__))
 
+    # First, run a script to connect to the prod gateway all the way up until it requests the token.
+    # This will give us more time to run and grab the token and paste it in before it expires.
     get_to_token_prompt_command = "osascript #{@script_home}/GetToTokenPrompt.scpt \"#{password}\" \"#{specific_options.gateway}\""
     run_shell_command(get_to_token_prompt_command, parser_components.basic_options.verbose)
 
+    # Quickly, go generate the token and get it on the clipboard
     token_script_command = "osascript #{@script_home}/GetToken.scpt \"#{pin}\""
     token = run_shell_command_with_output(token_script_command, parser_components.basic_options.verbose)
 
+    # Switch back to the open terminal, paste the token in, and continue on to ssh into the specified utility node
     continue_command = "osascript #{@script_home}/EnterTokenAndSSH.scpt \"#{token}\" \"#{specific_options.node}\" \"#{password}\""
     run_shell_command(continue_command, parser_components.basic_options.verbose)
   end

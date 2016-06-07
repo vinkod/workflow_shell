@@ -7,7 +7,9 @@ class GetToken < Command
 
   def initialize
     @command_string = 'gettoken'
-    @command_description = "Takes one argument, PIN. Uses SecurID to generate a production token."
+    @command_description = "Takes one argument, PIN. Uses SecurID to generate a production token. " +
+        "The token will be both the return value of this script and, as a side effect, " +
+        "will end up on the keyboard as well."
     @command_usage = @command_string + " <PIN>"
   end
 
@@ -22,7 +24,11 @@ class GetToken < Command
       print_help(parser_components.basic_options_printer, nil)
     end
 
-    command = "osascript GetToken.scpt #{production_pin}"
+    # Print a warning telling people not to press buttons while this is running.
+    print_interactivity_warning
+    @script_home = File.expand_path(File.dirname(__FILE__))
+
+    command = "osascript #{@script_home}/GetToken.scpt #{production_pin}"
     run_shell_command(command, parser_components.basic_options.verbose)
   end
 end

@@ -136,4 +136,11 @@ class Command
     puts specific_options
     exit(-1)
   end
+
+  def print_interactivity_warning
+    puts("IMPORTANT NOTE: Do NOT interfere with the keyboard and/or mouse while this script is running. " +
+             "Doing so will almost certainly cause this script to fail. Failure may be spectacular " +
+             "(e.g. sending your production password or pin to someone over Lync) but it may not be immediately obvious " +
+             "(e.g. repeatedly entering the wrong value into username or password and locking you out of production).")
+  end
 end
