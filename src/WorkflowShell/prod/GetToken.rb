@@ -29,6 +29,6 @@ class GetToken < Command
     @script_home = File.expand_path(File.dirname(__FILE__))
 
     command = "osascript #{@script_home}/GetToken.scpt #{production_pin}"
-    run_shell_command(command, parser_components.basic_options.verbose)
+    run_shell_command(command, false)
   end
 end
