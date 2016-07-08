@@ -1,6 +1,6 @@
 require_relative '../models/Command'
 
-class ProductionSSHLogin < Command
+class ProductionWebLogin < Command
   @command_string
   @command_description
   @command_usage = @command_string
