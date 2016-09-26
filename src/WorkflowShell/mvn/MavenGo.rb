@@ -41,7 +41,7 @@ class MavenGo < Command
       end
 
       opts.on("-s", "--site", "Build with a site report.") do
-        specific_options.skip_tests = true
+        specific_options.site = true
       end
 
       if parser_components.basic_options.help
