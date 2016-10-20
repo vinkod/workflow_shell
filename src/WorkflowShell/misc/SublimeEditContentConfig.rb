@@ -17,10 +17,18 @@ class SublimeEditContentConfig < Command
 
     command = "subl " +
         "config/dev/contentLoad/config.yaml " +
+        "config/dev_aws/contentLoad/config.yaml " +
+        "config/dev_cdh5/contentLoad/config.yaml " +
         "config/mapping/contentLoad/config.yaml " +
+        "config/mapping_uk/contentLoad/config.yaml " +
         "config/prod/contentLoad/config.yaml " +
+        "config/prod_cdh5/contentLoad/config.yaml " +
+        "config/prod_uk/contentLoad/config.yaml " +
         "config/staging/contentLoad/config.yaml " +
-        "config/wip/contentLoad/config.yaml"
+        "config/staging_cdh5/contentLoad/config.yaml " +
+        "config/wip/contentLoad/config.yaml " +
+        "config/wip_cdh5/contentLoad/config.yaml "
+
     run_shell_command(command, parser_components.basic_options.verbose)
   end
 end

@@ -24,24 +24,32 @@ class MavenGo < Command
       opts.banner = ""
       opts.separator  "Specific options: "
 
-      opts.on("-q", "--quiet", "Suppress most output.") do
-        specific_options.quiet = true
+      opts.on("-f", "--fast", "Build with multiple threads.") do
+        specific_options.fast = true
       end
+
+      opts.on("-i", "--incremental", "Attempt to incrementally build only modules which have changed between your branch and a specified Base Branch. Default is 'wip'.") do |baseBranch|
+        if baseBranch.nil?
+          specific_options.baseBranch="wip"
+        else
+          specific_options.baseBranch = baseBranch
+        end
+      end
+
 
       opts.on("-n", "--noTest", "Skip unit and integration tests.") do
         specific_options.skip_tests = true
       end
 
-      opts.on("-u", "--upload", "Upload the JAR(s) when done.") do
-        specific_options.upload = true
+      opts.on("-q", "--quiet", "Suppress most output.") do
+        specific_options.quiet = true
       end
-
-      opts.on("-f", "--fast", "Build with multiple threads.") do
-        specific_options.fast = true
-      end
-
       opts.on("-s", "--site", "Build with a site report.") do
         specific_options.site = true
+      end
+
+      opts.on("-u", "--upload", "Upload the JAR(s) when done.") do
+        specific_options.upload = true
       end
 
       if parser_components.basic_options.help
@@ -63,7 +71,16 @@ class MavenGo < Command
     # end
 
     # Base command
-    command = "mvn -U clean install"
+    command = "mvn -U install"
+    # might need to add 'clean' back eventually
+
+    unless specific_options.baseBranch.nil?
+
+
+
+
+      command += " "
+    end
 
     if specific_options.site
       command += " site"
