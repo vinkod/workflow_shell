@@ -1,12 +1,12 @@
 require_relative '../models/Command'
 
-class GitAddDot < Command
+class GitFixIgnore < Command
   @command_string
   @command_description
   @command_usage
 
   def initialize
-    @command_string = 'gitfixignore'
+    @command_string = 'gfignore'
     @command_description = 'Attempts to fix gitignore not working properly.'
     @command_usage = @command_string
   end
