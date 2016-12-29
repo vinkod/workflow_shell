@@ -1,23 +1,3 @@
-# This will hopefully check for the presence of some gems we need, and install them if they aren't present.
-begin
-  gem "win32-security"
-rescue LoadError
-  puts("Gem 'win32-security' not installed, installing...")
-  system("gem install win32-security")
-  Gem.clear_paths
-end
-begin
-  gem "net-ping"
-rescue LoadError
-  puts("Gem 'net-ping' not installed, installing...")
-  system("gem install net-ping")
-  Gem.clear_paths
-end
-
-require 'win32/security'
-require 'net/ping'
-require_relative '../models/Command'
-
 class MonitorConnection < Command
   @command_string
   @command_description
@@ -29,7 +9,27 @@ class MonitorConnection < Command
     @command_usage = @command_string
   end
 
-  def run_command(arguments)
+def run_command(arguments)
+    # This will hopefully check for the presence of some gems we need, and install them if they aren't present.
+    begin
+      gem "win32-security"
+    rescue LoadError
+      puts("Gem 'win32-security' not installed, installing...")
+      system("gem install win32-security")
+      Gem.clear_paths
+    end
+    begin
+      gem "net-ping"
+    rescue LoadError
+      puts("Gem 'net-ping' not installed, installing...")
+      system("gem install net-ping")
+      Gem.clear_paths
+    end
+
+    require 'win32/security'
+    require 'net/ping'
+    require_relative '../models/Command'
+
     # Ask the Command class to parse the basic options like help and verbosity
     parser_components = parse_options(arguments, true)
 
