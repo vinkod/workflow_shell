@@ -6,7 +6,7 @@ class BuildFreshCandidateStream < Command
   @command_usage
 
   def initialize
-    @command_string = 'jsbfcs'
+    @command_string = 'csbuild'
     @command_description = 'Clones candidate stream, changes to a specified directory, runs "npm install" and then "grunt build".'
     @command_usage = @command_string + " <Module Path> <Branch Name>"
   end
@@ -41,9 +41,9 @@ class BuildFreshCandidateStream < Command
     clone = "git clone git@github.com:cbdr/candidatestream.git"
     run_shell_command(clone, parser_components.basic_options.verbose)
 
-    full_path = "candidatestream/#{module_path}"
-    cd_to_module = "cd \"#{full_path}\""
-
+    module_path = "candidatestream/#{module_path}"    
+    cd_to_module = "cd \"#{module_path}\""
+    
     git_checkout = "#{cd_to_module} && git checkout \"#{branch_name}\""
     run_shell_command(git_checkout, parser_components.basic_options.verbose)
 
