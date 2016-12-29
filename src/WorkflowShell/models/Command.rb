@@ -2,6 +2,9 @@
 require 'optparse'
 require 'ostruct'
 
+# I don't know why this is needed, but puts occasionally decides not to work without it.
+STDOUT.sync = true
+
 class Command
 
   # These are intended to be superclass methods. Hopefully each subclass will define these variables.
