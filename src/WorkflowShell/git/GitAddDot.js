@@ -1,32 +1,25 @@
 const Command = require('../models/Command');
-const childProcess = require('child_process');
 
 class GitAddDot extends Command {
-  constructor() {
-    super();
-    this.string = 'gad';
-    this.description = 'Stages all files and folders in the current directory.';
-    this.usage = this.string;
+
+  static getString() {
+    return 'gad';
+  }
+
+  static getDescription() {
+    return 'Stages all files and folders in the current directory.';
+  }
+
+  getUsage() {
+    return GitAddDot.getString();
   }
 
   run(args) {
-    const commitMessage = args._.pop();
-    if (!commitMessage) {
-      console.log('You must specify a commit message!');
-      printHelp();
-      return;
-    }
+    super.run(args);
 
-    const baseCommand = `git commit --all --message \"${commitMessage}\"`
-    // const baseCommand = `ls -la`
-    const execSync = childProcess.execSync;
-    const commandExecution = execSync(baseCommand, { stdio: 'inherit' });
-    // console.log(`${JSON.stringify(commandExecution)}`);
-
-    // console.log(`stderr: ${commandExecution.stderr.toString()}`);
-    // console.log(`stdout: ${commandExecution.stdout.toString()}`);
+    const baseCommand = 'git add .';
+    super.execute(baseCommand);
   }
-
 }
 
-module.exports = GitAddDot
+module.exports = GitAddDot;

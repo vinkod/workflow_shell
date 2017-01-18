@@ -29,7 +29,12 @@
     "jasmine/no-spec-dupes": [0],
     "valid-jsdoc": [2, {
       "requireReturnType": false
-    }]
+    }],
+    "class-methods-use-this": [0],
+    "import/no-dynamic-require": [0],
+    "global-require": [0],
+    "padded-blocks": [0],
+    "no-await-in-loop": [0]
   },
   "extends": [
     "airbnb",

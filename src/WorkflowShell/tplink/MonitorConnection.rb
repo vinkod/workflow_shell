@@ -58,8 +58,8 @@ def run_command(arguments)
 
       puts('Turning plug on...')
       Process.spawn("python #{turn_on}")
-      puts('Sleeping for 60 seconds...')
-      sleep(60)
+      puts('Sleeping for 90 seconds...')
+      sleep(90)
     end
   end
 end

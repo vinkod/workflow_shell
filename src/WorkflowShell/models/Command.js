@@ -1,29 +1,61 @@
-
+const ChildProcess = require('child_process');
 
 class Command {
 
-
-  getString() {
-    return this.string;
+  static getString() {
+    throw new Error(`${this.constructor.name} did not implement 'getString' method.`);
   }
 
-  getDescription() {
-    return this.description;
+  static getDescription() {
+    throw new Error(`${this.constructor.name} did not implement 'getDescription' method.`);
   }
 
   getUsage() {
-    return this.usage;
-  }
-
-  printHelp() {
-    console.log(`Usage: ${this.getUsage()}`);
-    console.log('');
-    console.log(this.format('-h', '--h', 'Prints this help message'));
-    process.exitCode = 1;
+    throw new Error(`${this.constructor.name} did not implement 'getUsage' method.`);
   }
 
   run(args) {
-    throw new Error(`${this.getString()} did not implement 'run_command' method.\nArguments: ${args}`);
+    if (typeof args !== 'undefined' &&
+      args !== undefined &&
+      ('-h' in args || '--help' in args)) {
+      this.printHelp();
+      process.exitCode = 1;
+    }
+  }
+
+  printHelp() {
+    console.log('');
+    console.log(`Usage: wsh ${this.getUsage()}`);
+    console.log(Command.format('-h', '--help', 'Prints this help message'));
+  }
+
+  execute(command) {
+    const execSync = ChildProcess.execSync;
+    try {
+      console.log(`Running: ${command}`);
+      const commandExecution = execSync(command, { stdio: 'inherit' });
+
+      return commandExecution;
+    } catch (error) {
+      console.log(`ERROR:\n${error}`);
+      process.exitCode = 1;
+      return null;
+    }
+  }
+
+  executeWithReturn(command) {
+    const execSync = ChildProcess.execSync;
+    try {
+      console.log(`Running: ${command}`);
+      const commandExecution = execSync(command);
+      console.log(`Result: ${commandExecution}`);
+
+      return commandExecution;
+    } catch (error) {
+      console.log(`ERROR:\n${error}`);
+      process.exitCode = 1;
+      return null;
+    }
   }
 
   static format(short, long, description) {
@@ -31,4 +63,4 @@ class Command {
   }
 }
 
-module.exports = Command
+module.exports = Command;

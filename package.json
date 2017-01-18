@@ -21,7 +21,8 @@
   "homepage": "https://github.com/champgm/workflow_shell#readme",
   "dependencies": {
     "eslint": "^3.13.1",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "tcp-ping": "^0.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
