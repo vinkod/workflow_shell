@@ -26,7 +26,11 @@ def run_command(arguments)
       Gem.clear_paths
     end
 
-    require 'win32/security'
+    begin
+      require 'win32/security'
+    rescue LoadError
+      puts("Failed to require win32 security... unix machine?")
+    end
     require 'net/ping'
     require_relative '../models/Command'
 
