@@ -15,12 +15,16 @@ class GitFixIgnore extends Command {
   }
 
   run(args) {
-    super.run(args);
+    const ok = super.run(args);
+    if (!ok) {
+      return false;
+    }
 
     super.execute('git commit -a -m "Before Fixing gitignore"');
     super.execute('git rm -r --cached .');
     super.execute('git add .');
     super.execute('git commit -a -m "Fixed gitignore"');
+    return true;
   }
 }
 

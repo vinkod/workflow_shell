@@ -1,5 +1,7 @@
 const ChildProcess = require('child_process');
 
+const help = { short: 'h', long: 'help', description: 'Prints this help message.' };
+
 class Command {
 
   static getString() {
@@ -15,18 +17,21 @@ class Command {
   }
 
   run(args) {
+    console.log(`ARGS: ${JSON.stringify(args)}`);
     if (typeof args !== 'undefined' &&
       args !== undefined &&
-      ('-h' in args || '--help' in args)) {
+      (help.short in args || help.long in args)) {
       this.printHelp();
       process.exitCode = 1;
+      return false;
     }
+    return true;
   }
 
   printHelp() {
+    console.log(Command.format(help));
     console.log('');
     console.log(`Usage: wsh ${this.getUsage()}`);
-    console.log(Command.format('-h', '--help', 'Prints this help message'));
   }
 
   execute(command) {
@@ -58,8 +63,8 @@ class Command {
     }
   }
 
-  static format(short, long, description) {
-    return `${short}\t${long}\t${description}`;
+  static format({ short, long, description }) {
+    return `-${short}\t\t--${long}\t\t${description}`;
   }
 }
 

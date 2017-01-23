@@ -1,17 +1,17 @@
 const Command = require('../models/Command');
 
-class GitPushForceOrigin extends Command {
+class GitSetUpstream extends Command {
 
   static getString() {
-    return 'gpfo';
+    return 'gsu';
   }
 
   static getDescription() {
-    return 'Force pushes the current branch into a remote branch of the same name.';
+    return 'Sets the target upstream branch.';
   }
 
   getUsage() {
-    return GitPushForceOrigin.getString();
+    return GitSetUpstream.getString();
   }
 
   run(args) {
@@ -23,9 +23,9 @@ class GitPushForceOrigin extends Command {
     const branchCommand = 'git rev-parse --abbrev-ref HEAD';
     const branchName = super.executeWithReturn(branchCommand);
 
-    const pushCommand = `git push -f origin ${branchName}`;
+    const pushCommand = `git branch --set-upstream-to origin/${branchName}`;
     return super.execute(pushCommand);
   }
 }
 
-module.exports = GitPushForceOrigin;
+module.exports = GitSetUpstream;

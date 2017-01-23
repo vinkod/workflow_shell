@@ -15,7 +15,10 @@ class GitGo extends Command {
   }
 
   run(args) {
-    super.run(args);
+    const ok = super.run(args);
+    if (!ok) {
+      return false;
+    }
 
     const commitsToRebase = args._.shift();
     const GitCommitAllMessage = require('./GitCommitAllMessage');
@@ -27,7 +30,7 @@ class GitGo extends Command {
       new GitAmend().run();
     }
     const GitPushForceOrigin = require('./GitPushForceOrigin');
-    new GitPushForceOrigin().run();
+    return new GitPushForceOrigin().run();
   }
 }
 

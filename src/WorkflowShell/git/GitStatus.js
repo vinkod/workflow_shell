@@ -1,17 +1,17 @@
 const Command = require('../models/Command');
 
-class GitAddDot extends Command {
+class GitStatus extends Command {
 
   static getString() {
-    return 'gad';
+    return 'gs';
   }
 
   static getDescription() {
-    return 'Stages all files and folders in the current directory.';
+    return 'Displays the current status of the git repository.';
   }
 
   getUsage() {
-    return GitAddDot.getString();
+    return GitStatus.getString();
   }
 
   run(args) {
@@ -20,9 +20,9 @@ class GitAddDot extends Command {
       return false;
     }
 
-    const baseCommand = 'git add .';
+    const baseCommand = 'git status';
     return super.execute(baseCommand);
   }
 }
 
-module.exports = GitAddDot;
+module.exports = GitStatus;

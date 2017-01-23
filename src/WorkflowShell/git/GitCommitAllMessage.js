@@ -15,17 +15,20 @@ class GitCommitAllMessage extends Command {
   }
 
   run(args) {
-    super.run(args);
+    const ok = super.run(args);
+    if (!ok) {
+      return false;
+    }
 
     const commitMessage = args._.shift();
     if (!commitMessage) {
       console.log('You MUST specify the commit message!');
       this.printHelp();
-      return;
+      return false;
     }
 
     const baseCommand = `git commit --all --message "${commitMessage}"`;
-    super.execute(baseCommand);
+    return super.execute(baseCommand);
   }
 }
 

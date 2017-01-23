@@ -1,5 +1,4 @@
 require_relative '../models/Command'
-require_relative '../misc/UploadJars'
 
 class MavenGo < Command
   @command_string
@@ -90,10 +89,6 @@ class MavenGo < Command
     # Run it
     run_shell_command(command, parser_components.basic_options.verbose)
 
-    # Upload the JARs
-    if specific_options.upload
-      UploadJars.new.run_command([])
-    end
   end
 
 end

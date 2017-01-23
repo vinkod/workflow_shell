@@ -15,17 +15,20 @@ class GitCommitAllMessage extends Command {
   }
 
   run(args) {
-    super.run(args);
+    const ok = super.run(args);
+    if (!ok) {
+      return false;
+    }
 
     const commitsToRebase = args._.shift();
     if (!commitsToRebase) {
       console.log('You MUST specify the number of commits to rebase!');
       this.printHelp();
-      return;
+      return false;
     }
 
     const baseCommand = `git rebase -i HEAD~${commitsToRebase}`;
-    super.execute(baseCommand);
+    return super.execute(baseCommand);
   }
 }
 

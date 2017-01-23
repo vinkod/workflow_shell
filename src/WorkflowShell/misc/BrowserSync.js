@@ -1,17 +1,17 @@
 const Command = require('../models/Command');
 
-class GitAddDot extends Command {
+class BrowserSync extends Command {
 
   static getString() {
-    return 'gad';
+    return 'bsync';
   }
 
   static getDescription() {
-    return 'Stages all files and folders in the current directory.';
+    return 'Starts up BrowserSync with normal options.';
   }
 
   getUsage() {
-    return GitAddDot.getString();
+    return BrowserSync.getString();
   }
 
   run(args) {
@@ -20,9 +20,9 @@ class GitAddDot extends Command {
       return false;
     }
 
-    const baseCommand = 'git add .';
+    const baseCommand = 'browser-sync start --server --directory --files "**/*"';
     return super.execute(baseCommand);
   }
 }
 
-module.exports = GitAddDot;
+module.exports = BrowserSync;

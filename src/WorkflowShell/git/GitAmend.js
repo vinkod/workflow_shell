@@ -15,10 +15,13 @@ class GitAmend extends Command {
   }
 
   run(args) {
-    super.run(args);
+    const ok = super.run(args);
+    if (!ok) {
+      return false;
+    }
 
     const baseCommand = 'git commit --amend --reset-author --no-edit';
-    super.execute(baseCommand);
+    return super.execute(baseCommand);
   }
 }
 

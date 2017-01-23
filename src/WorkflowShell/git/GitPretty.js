@@ -1,17 +1,17 @@
 const Command = require('../models/Command');
 
-class GitAddDot extends Command {
+class GitPretty extends Command {
 
   static getString() {
-    return 'gad';
+    return 'gpretty';
   }
 
   static getDescription() {
-    return 'Stages all files and folders in the current directory.';
+    return 'Displays the git log with each commit taking only one line.';
   }
 
   getUsage() {
-    return GitAddDot.getString();
+    return GitPretty.getString();
   }
 
   run(args) {
@@ -20,9 +20,9 @@ class GitAddDot extends Command {
       return false;
     }
 
-    const baseCommand = 'git add .';
+    const baseCommand = 'git log --pretty=oneline';
     return super.execute(baseCommand);
   }
 }
 
-module.exports = GitAddDot;
+module.exports = GitPretty;
