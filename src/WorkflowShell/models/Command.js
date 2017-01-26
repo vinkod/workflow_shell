@@ -3,21 +3,18 @@ const ChildProcess = require('child_process');
 const help = { short: 'h', long: 'help', description: 'Prints this help message.' };
 
 class Command {
-
   static getString() {
     throw new Error(`${this.constructor.name} did not implement 'getString' method.`);
   }
-
   static getDescription() {
     throw new Error(`${this.constructor.name} did not implement 'getDescription' method.`);
   }
-
   getUsage() {
     throw new Error(`${this.constructor.name} did not implement 'getUsage' method.`);
   }
 
   run(args) {
-    console.log(`ARGS: ${JSON.stringify(args)}`);
+    // console.log(`ARGS: ${JSON.stringify(args)}`);
     if (typeof args !== 'undefined' &&
       args !== undefined &&
       (help.short in args || help.long in args)) {
@@ -39,7 +36,6 @@ class Command {
     try {
       console.log(`Running: ${command}`);
       const commandExecution = execSync(command, { stdio: 'inherit' });
-
       return commandExecution;
     } catch (error) {
       console.log(`ERROR:\n${error}`);
@@ -53,8 +49,7 @@ class Command {
     try {
       console.log(`Running: ${command}`);
       const commandExecution = execSync(command);
-      console.log(`Result: ${commandExecution}`);
-
+      console.log(`Result:\n${commandExecution}`);
       return commandExecution;
     } catch (error) {
       console.log(`ERROR:\n${error}`);

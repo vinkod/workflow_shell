@@ -16,7 +16,6 @@ class MavenGo extends Command {
   }
 
 
-
   getUsage() {
     let usage = `${MavenGo.getString()} -options\n`;
     usage = usage.concat(Command.format(fast)).concat('\n');
