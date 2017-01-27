@@ -5,20 +5,54 @@ const Sleep = require('sleep');
 const TPLinkUtil = require('./util/TPLinkUtil');
 const Command = require('../models/Command');
 
+/**
+ * Monitors the status of the current internet connection by pinging a given host.
+ * If the connection fails or host cannot be reached, a given TPLink plug will be turned off and back on.
+ *
+ * @class MonitorConnection
+ * @extends {Command}
+ */
 class MonitorConnection extends Command {
 
+  /**
+   * See parent class
+   */
   static getString() {
     return 'tpmc';
   }
 
+  /**
+   *
+   *
+   * @static
+   * @returns
+   *
+   * @memberOf MonitorConnection
+   */
   static getDescription() {
     return 'Monitors internet connection and resets the TPLink plug if it goes down.';
   }
 
+  /**
+   *
+   *
+   * @returns
+   *
+   * @memberOf MonitorConnection
+   */
   getUsage() {
     return MonitorConnection.getString();
   }
 
+  /**
+   *
+   *
+   * @param {any} host
+   * @param {any} plugIp
+   * @param {any} plugPort
+   *
+   * @memberOf MonitorConnection
+   */
   async checkConnection(host, plugIp, plugPort) {
     console.log('Now monitoring connection. Initial ping...');
     const options = { address: host };
@@ -55,6 +89,14 @@ class MonitorConnection extends Command {
     }
   }
 
+  /**
+   *
+   *
+   * @param {any} args
+   * @returns
+   *
+   * @memberOf MonitorConnection
+   */
   async run(args) {
     const ok = super.run(args);
     if (!ok) {
@@ -90,16 +132,37 @@ class MonitorConnection extends Command {
 
   // Let's try to learn how to promisify something manually.
   // First, we'll create our own internal method and label it async.
+  /**
+   *
+   *
+   * @param {any} options
+   * @returns
+   *
+   * @memberOf MonitorConnection
+   */
   async hostIsReachable(options) {
 
     // Since it's asynchronous, it needs to return a Promise.
     // The promise constructor takes a function with two parameters, each functions.
     // To the first, you pass any successful results.
     // To the second, you pass any error.
+    /**
+     *
+     *
+     * @param {any} resolve
+     * @param {any} reject
+     * @returns
+     */
     const promiseFunction = (resolve, reject) => {
 
       // Inside of this function, you call the method you originally intended to use.
       // Typically, it wants a "callback" function. Otherwise, you wouldn't be here.
+      /**
+       *
+       *
+       * @param {any} error
+       * @param {any} data
+       */
       const pingCallback = (error, data) => {
 
         // The signature and behavior of this function will change depending on the situation
@@ -113,10 +176,9 @@ class MonitorConnection extends Command {
         } else {
           // Normal/real stuff goes here.
           console.log(`COMPLETE: ${JSON.stringify(data)}`);
-          // If you're successful, pass the result of your logic back with first function
-          console.log(`data.avg: ${data.avg}`);
-          const successful = (data.avg != null);
+          const successful = (data.max !== undefined);
           console.log(`will resolve: ${successful}`);
+          // If you're successful, pass the result of your logic back with first function
           resolve(successful);
         }
       };
