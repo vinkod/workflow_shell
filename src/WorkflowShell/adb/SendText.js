@@ -27,18 +27,18 @@ class SendText extends Command {
       return false;
     }
 
-    textToSend = textToSend.replace('(', '\\(');
-    textToSend = textToSend.replace(')', '\\)');
-    textToSend = textToSend.replace('<', '\\<');
-    textToSend = textToSend.replace('>', '\\>');
-    textToSend = textToSend.replace('|', '\\|');
-    textToSend = textToSend.replace(';', '\\;');
-    textToSend = textToSend.replace('&', '\\&');
-    textToSend = textToSend.replace('*', '\\*');
-    textToSend = textToSend.replace('~', '\\~');
-    textToSend = textToSend.replace('"', '\\"');
-    textToSend = textToSend.replace("'", "\\'");
-    textToSend = textToSend.replace(' ', '%s');
+    textToSend = textToSend.replace(/\(/g, '\\(');
+    textToSend = textToSend.replace(/\)/g, '\\)');
+    textToSend = textToSend.replace(/</g, '\\<');
+    textToSend = textToSend.replace(/>/g, '\\>');
+    textToSend = textToSend.replace(/\|/g, '\\|');
+    textToSend = textToSend.replace(/;/g, '\\;');
+    textToSend = textToSend.replace(/&/g, '\\&');
+    textToSend = textToSend.replace(/\*/g, '\\*');
+    textToSend = textToSend.replace(/~/g, '\\~');
+    textToSend = textToSend.replace(/"/g, '\\"');
+    textToSend = textToSend.replace(/'/g, "\\'");
+    textToSend = textToSend.replace(/ /g, '%s');
 
     const baseCommand = `adb shell input text "${textToSend}"`;
     return super.execute(baseCommand);
