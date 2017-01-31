@@ -40,8 +40,12 @@ class TurnOff extends Command {
     }
 
     const socket = new net.Socket();
-    await TPLinkUtil.turnOff(plugIp, plugPort, socket);
-
+    try {
+      await TPLinkUtil.turnOff(plugIp, plugPort, socket);
+    } catch (error) {
+      throw new Error(error);
+    }
+    console.log('Done.');
     return true;
   }
 }

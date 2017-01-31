@@ -41,7 +41,7 @@ class TurnOn extends Command {
 
     const socket = new net.Socket();
     await TPLinkUtil.turnOn(plugIp, plugPort, socket);
-
+    console.log('Done.');
     return true;
   }
 }

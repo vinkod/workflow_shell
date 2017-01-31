@@ -24,8 +24,9 @@ class TPLinkUtil {
     if (connected) {
       // TODO: more research into these messages to better understand them.
       const offResult1 = await TPLinkUtil.writeToClient('0000002ad0f281f88bff9af7d5ef94b6c5a0d48bf99cf091e8b7c4b0d1a5c0e2d8a381f286e793f6d4eedea3dea3', 'hex', socketClient);
-      Sleep.sleep(1000);
+      Sleep.sleep(1);
       const offResult2 = await TPLinkUtil.writeToClient('0000002dd0f281f88bff9af7d5ef94b6c5a0d48bf99cf091e8b7c4b0d1a5c0e2d8a381e496e4bbd8b7d3b694ae9ee39ee3', 'hex', socketClient);
+      socketClient.end();
       return Promise.resolve({ offResult1, offResult2 });
     }
     return Promise.reject('Unable to connect to the plug in order to turn it off.');
@@ -49,8 +50,9 @@ class TPLinkUtil {
     if (connected) {
       // TODO: more research into these messages to better understand them.
       const onResult1 = await TPLinkUtil.writeToClient('0000002ad0f281f88bff9af7d5ef94b6c5a0d48bf99cf091e8b7c4b0d1a5c0e2d8a381f286e793f6d4eedfa2dfa2', 'hex', socketClient);
-      Sleep.sleep(1000);
+      Sleep.sleep(1);
       const onResult2 = await TPLinkUtil.writeToClient('00000025d0f281e28aef8bfe92f7d5ef94b6d1b4c09ff194ec98c7a6c5b1d8b7d9fbc1afdab6daa7da', 'hex', socketClient);
+      socketClient.end();
       return Promise.resolve({ onResult1, onResult2 });
     }
     return Promise.reject('Unable to connect to the plug in order to turn it on.');
@@ -70,12 +72,15 @@ class TPLinkUtil {
   static async connectClient(plugIp, plugPort, socketClient) {
     const promiseWrapper = (resolve, reject) => {
       const connectedCallback = () => {
+        console.log('Connection successful.');
         resolve(true);
       };
       const errorCallback = (error) => {
+        console.log(`Connection failed or ended: ${error}`);
         reject(error);
       };
       socketClient.on('error', errorCallback);
+      console.log('Connecting to plug...');
       return socketClient.connect(plugPort, plugIp, connectedCallback);
     };
     return new Promise(promiseWrapper);
@@ -96,16 +101,19 @@ class TPLinkUtil {
     const promiseWrapper = (resolve, reject) => {
       const callback = (error, result) => {
         if (error) {
-          console.error(`Error writing to client: ${JSON.stringify(result)}`);
+          console.error(`Writing failed: ${JSON.stringify(result)}`);
           reject(error);
-        } else if (result) {
+        } else {
+          console.error('Writing succeeded.');
           resolve(result);
-          console.error(`Connection failed: ${JSON.stringify(result)}`);
-          reject(result);
         }
       };
-      return socketClient.write(message, encoding, callback);
+      console.log(`Writing to plug: ${message}`);
+      const writeResult = socketClient.write(message, encoding, callback);
+      return writeResult;
     };
     return new Promise(promiseWrapper);
   }
 }
+
+module.exports = TPLinkUtil;
