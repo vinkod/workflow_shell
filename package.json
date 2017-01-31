@@ -21,6 +21,7 @@
   "homepage": "https://github.com/champgm/workflow_shell#readme",
   "dependencies": {
     "eslint": "^3.13.1",
+    "hs100-api": "^0.3.0",
     "minimist": "^1.2.0",
     "net": "^1.0.2",
     "sleep": "^5.1.0",

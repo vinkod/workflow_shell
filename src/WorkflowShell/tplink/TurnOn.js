@@ -1,5 +1,4 @@
-const net = require('net');
-const TPLinkUtil = require('./util/TPLinkUtil');
+const Hs100Api = require('hs100-api');
 const Command = require('../models/Command');
 
 class TurnOn extends Command {
@@ -39,9 +38,46 @@ class TurnOn extends Command {
       console.log(`Plug port specified. Will use '${plugPort}'`);
     }
 
-    const socket = new net.Socket();
-    await TPLinkUtil.turnOn(plugIp, plugPort, socket);
-    console.log('Done.');
+    try {
+      const client = new Hs100Api.Client();
+      const plug = await client.getPlug({ host: plugIp, port: plugPort, timeout: 60 });
+      console.log(`Retrieved plug: ${JSON.stringify(plug)}`);
+      const info = await plug.getInfo();
+      console.log(`info: ${JSON.stringify(info)}`);
+      const sysInfo = await plug.getSysInfo();
+      console.log(`sysInfo: ${JSON.stringify(sysInfo)}`);
+      const cloudInfo = await plug.getCloudInfo();
+      console.log(`cloudInfo: ${JSON.stringify(cloudInfo)}`);
+      const consumption = await plug.getConsumption();
+      console.log(`consumption: ${JSON.stringify(consumption)}`);
+      const powerState = await plug.getPowerState();
+      console.log(`powerState: ${powerState}`);
+      const scheduleNextAction = await plug.getScheduleNextAction();
+      console.log(`scheduleNextAction: ${JSON.stringify(scheduleNextAction)}`);
+      const scheduleRules = await plug.getScheduleRules();
+      console.log(`scheduleRules: ${JSON.stringify(scheduleRules)}`);
+      const awayRules = await plug.getAwayRules();
+      console.log(`awayRules: ${JSON.stringify(awayRules)}`);
+      const timerRules = await plug.getTimerRules();
+      console.log(`timerRules: ${JSON.stringify(timerRules)}`);
+      const time = await plug.getTime();
+      console.log(`time: ${JSON.stringify(time)}`);
+      const timeZone = await plug.getTimeZone();
+      console.log(`timeZone: ${JSON.stringify(timeZone)}`);
+      const scanInfo = await plug.getScanInfo();
+      console.log(`scanInfo: ${JSON.stringify(scanInfo)}`);
+      const model = await plug.getModel();
+      console.log(`model: ${model}`);
+
+      console.log('');
+      console.log('Attempting to turn plug on...');
+      const setPowerStateResult = await plug.setPowerState(true);
+      console.log(`Result: ${JSON.stringify(setPowerStateResult)}`);
+      console.log('Done.');
+      process.exit();
+    } catch (error) {
+      throw new Error(error);
+    }
     return true;
   }
 }
