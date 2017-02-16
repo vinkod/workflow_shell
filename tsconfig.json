@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./lib",
+        "sourceMap": true,
+        "types" : [ "node" ],
+        "typeRoots": ["node_modules/@types"],
+        "target": "es6"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "spec/**/*"
+    ]
+}
