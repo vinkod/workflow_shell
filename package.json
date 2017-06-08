@@ -20,11 +20,20 @@
   },
   "homepage": "https://github.com/champgm/workflow_shell#readme",
   "dependencies": {
+    "aws-sdk": "^2.11.0",
+    "casper": "^0.1.1",
+    "casperjs": "^1.1.4",
     "eslint": "^3.13.1",
+    "fast-csv": "^2.3.1",
+    "fs": "0.0.1-security",
     "minimist": "^1.2.0",
     "net": "^1.0.2",
-    "sleep": "^5.1.0",
-    "tcp-ping": "^0.1.1"
+    "phantom": "^4.0.4",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "sleep": "^5.1.1",
+    "tcp-ping": "^0.1.1",
+    "zombie": "^5.0.5"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
