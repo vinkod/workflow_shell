@@ -84,23 +84,29 @@ class TestCandidatestream extends Command {
     }
 
     for (const fileName of args._) {
-      console.log(`Sending ${fileName}`);
-      const json = JSON.parse(fs.readFileSync(fileName).toString());
+      try {
+        console.log(`Sending ${fileName}`);
+        const json = JSON.parse(fs.readFileSync(fileName).toString());
 
-      const options = {
-        method: 'POST',
-        uri: inputEndpoint,
-        headers: {
-          'x-3scale-proxy-secret-token': inputToken,
-          authorization: inputAuthorization
-        },
-        body: json,
-        json: true
-      };
+        const options = {
+          method: 'POST',
+          uri: inputEndpoint,
+          headers: {
+            'x-3scale-proxy-secret-token': inputToken,
+            authorization: inputAuthorization
+          },
+          body: json,
+          json: true
+        };
 
-      const response = await request(options);
-      console.log(`Emails: ${json.candidate.email}`);
-      console.log(`${JSON.stringify(response, null, 2)}`);
+        const response = await request(options);
+        console.log(`Emails: ${json.candidate.email}`);
+        console.log(`${JSON.stringify(response, null, 2)}`);
+      } catch (error) {
+        console.log('An error occured');
+        console.log(`Message: ${error.message}`);
+        console.log(`Stack: ${error.stack}`);
+      }
     }
 
     return true;

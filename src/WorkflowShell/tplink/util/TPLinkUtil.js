@@ -1,4 +1,4 @@
-const Sleep = require('sleep');
+// const Sleep = require('sleep');
 
 /**
  * A util class for interacting with TPLink plugs
@@ -49,7 +49,7 @@ class TPLinkUtil {
     if (connected) {
       // TODO: more research into these messages to better understand them.
       const onResult1 = await TPLinkUtil.writeToClient('0000002ad0f281f88bff9af7d5ef94b6c5a0d48bf99cf091e8b7c4b0d1a5c0e2d8a381f286e793f6d4eedfa2dfa2', 'hex', socketClient);
-      Sleep.sleep(1000);
+      // Sleep.sleep(1000);
       const onResult2 = await TPLinkUtil.writeToClient('00000025d0f281e28aef8bfe92f7d5ef94b6d1b4c09ff194ec98c7a6c5b1d8b7d9fbc1afdab6daa7da', 'hex', socketClient);
       return Promise.resolve({ onResult1, onResult2 });
     }
